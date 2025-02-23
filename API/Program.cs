@@ -9,7 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddApplicationService(builder.Configuration);
-
+builder.Services.AddCors(opt=> {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
+                });
+            });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline for middleware.
@@ -21,7 +26,6 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
-
 app.UseAuthorization();
 app.MapControllers();
 
